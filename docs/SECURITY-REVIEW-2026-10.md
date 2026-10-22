@@ -18,6 +18,15 @@ Fixed in the pull request that publishes this report (the first commit after the
 - **RZ-016:** the two remaining real MAC addresses (one in a README example, one in a unit test) were replaced with the
   made-up values used elsewhere. They remain in earlier commits of the public history.
 
+Fixed on 2026-10-22, in response to the GhostAction credential-theft campaign (the repository was checked and found
+clean: no injected workflow on any branch, no workflow runs during the 8 to 12 October waves, no repository secrets or deploy
+keys to exfiltrate, and `cargo audit` reports no advisories against `Cargo.lock`):
+
+- **RZ-004 (part):** all actions are pinned to commit SHAs and the repository now requires SHA pinning and allows only
+  GitHub-owned actions; CI gained a `cargo audit --deny warnings` job; Dependabot is configured for `cargo` and
+  `github-actions` and Dependabot alerts are enabled; `pages.yml` reads the token from `env:` instead of interpolating it into
+  the script. Still open from RZ-004: the unpinned toolchain and the tag ruleset.
+
 Everything else listed below is open and tracked by its RZ id.
 
 ## 1. Scope, method, exclusions
