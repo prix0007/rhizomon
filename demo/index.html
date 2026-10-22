@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rhizomon - live 3D map of the devices on your network</title>
+  <meta name="description" content="Rhizomon maps every device on your local network as a live 3D graph: the gateway at the centre, each device linked to it, updated as devices join and leave.">
+  <meta name="theme-color" content="#06110f">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Rhizomon">
+  <meta property="og:title" content="Rhizomon - live 3D map of the devices on your network">
+  <meta property="og:description" content="Every device on your local network as a live 3D graph, with names, vendors and status.">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The Rhizomon logo: a glowing gateway with roots reaching out to devices.">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Rhizomon - live 3D map of the devices on your network">
+  <meta name="twitter:description" content="Every device on your local network as a live 3D graph, with names, vendors and status.">
+  <meta name="twitter:image:alt" content="The Rhizomon logo: a glowing gateway with roots reaching out to devices.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <noscript><div id="noscript">Rhizomon draws a live 3D map and needs JavaScript and WebGL. Enable JavaScript to see the devices on your network.</div></noscript>
+  <div id="demo-banner" role="note" hidden>
+    <b>Demo:</b> synthetic network. Run Rhizomon locally to see your own.
+    <a href="../">Download</a> <span aria-hidden="true">&middot;</span> <a href="https://github.com/prix0007/rhizomon" rel="noopener">GitHub</a>
+  </div>
+  <header id="hud">
+    <div id="brand">
+      <img id="logo" src="logo.svg" alt="" width="34" height="34">
+      <div id="wordmark"><h1>rhizomon</h1><span>live map of this network</span></div>
+      <button id="recenter" type="button" aria-label="Recenter the map (R)" title="Recenter (R)">
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="2.2" fill="currentColor"/><path d="M8 1.5v3M8 11.5v3M1.5 8h3M11.5 8h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/></svg>
+      </button>
+    </div>
+    <details class="hud-sec" id="sec-network" data-key="network" open>
+      <summary>Traffic <span class="sec-meta" id="net-iface"></span></summary>
+      <div class="sec-body">
+        <div class="rate-row"><span class="k">&darr; down</span><b id="net-rx">&mdash;</b><span class="k">&uarr; up</span><b id="net-tx">&mdash;</b></div>
+        <svg id="spark" viewBox="0 0 200 34" preserveAspectRatio="none" role="img" aria-label="This Mac's traffic over the last minute" focusable="false">
+          <polyline id="spark-rx" fill="none" stroke="#5fe08a" stroke-width="1.4" stroke-linejoin="round"/>
+          <polyline id="spark-tx" fill="none" stroke="#5ab0ff" stroke-width="1.4" stroke-linejoin="round"/>
+        </svg>
+        <div class="sub-k">This Mac&rsquo;s link</div>
+        <div id="net-link-title" class="val">&mdash;</div>
+        <div id="net-link-detail" class="dim"></div>
+        <div class="sub-k">Internet (whole network)</div>
+        <div class="rate-row"><span class="k">&darr;</span><b id="wan-rx">&mdash;</b><span class="k">&uarr;</span><b id="wan-tx">&mdash;</b></div>
+        <p id="net-note" class="dim note-line"></p>
+      </div>
+    </details>
+    <details class="hud-sec" id="sec-capture" data-key="capture">
+      <summary>Packet capture <span class="badge" id="cap-badge">unknown</span></summary>
+      <div class="sec-body">
+        <p id="cap-text" class="note-line"></p>
+        <p class="dim note-line">Capture, when on, sees only traffic that touches this Mac plus broadcast and multicast chatter from every device. Other devices&rsquo; traffic to each other or the internet is not visible.</p>
+      </div>
+    </details>
+    <details class="hud-sec" id="sec-legend" data-key="legend" open>
+      <summary>Legend</summary>
+      <div class="sec-body">
+        <ul id="legend" aria-label="Legend: device colours and counts">
+          <li><i class="dot gw"></i>gateway<b data-count="gw">0</b></li>
+          <li><i class="dot me"></i>this Mac<b data-count="me">0</b></li>
+          <li><i class="dot on"></i>online<b data-count="on">0</b></li>
+          <li><i class="dot new"></i>new<b data-count="new">0</b></li>
+          <li><i class="dot off"></i>offline<b data-count="off">0</b></li>
+          <li class="note"><i class="dot ringkey"></i>ring: one hop out</li>
+          <li class="note"><i class="dot pk measured"></i>pulse: measured flow</li>
+          <li class="note"><i class="dot pk latency"></i>pulse: latency only</li>
+        </ul>
+      </div>
+    </details>
+  </header>
+  <main id="stage" aria-label="Interactive 3D map of devices on the network">
+    <div id="graph"></div>
+    <div id="labels" aria-hidden="true"></div>
+    <ul id="device-list" class="sr-only" aria-label="Devices on the network"></ul>
+  </main>
+  <div id="statusbar"><i class="pulse"></i><span id="status-text">connecting...</span></div>
+  <div id="hint">drag to orbit &middot; scroll to zoom &middot; click a device</div>
+  <div id="banners" role="alert"></div>
+  <aside id="panel" aria-hidden="true" aria-label="Device details">
+    <button id="panel-close" type="button" aria-label="Close device details">&times;</button>
+    <h2 id="panel-title"></h2>
+    <dl id="panel-rows"></dl>
+    <dl id="panel-traffic"></dl>
+    <form id="edit" autocomplete="off">
+      <label for="edit-name">Name</label>
+      <input id="edit-name" type="text" maxlength="64" spellcheck="false">
+      <label for="edit-notes">Notes</label>
+      <textarea id="edit-notes" rows="3" maxlength="500"></textarea>
+      <div class="row">
+        <button id="edit-save" type="submit">Save</button>
+        <button id="edit-reset" type="button">Reset</button>
+      </div>
+      <p id="edit-msg" role="status"></p>
+    </form>
+  </aside>
+  <script src="vendor/3d-force-graph.min.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

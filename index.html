@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download Rhizomon - live 3D map of your local network</title>
+<meta name="description" content="Rhizomon maps every device on your local network in a live 3D graph. It runs entirely on your machine: no cloud, no account, no telemetry. Download for macOS, Linux and Windows.">
+<link rel="canonical" href="https://rhizomon.com/">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<meta name="theme-color" content="#07100f">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Rhizomon - live 3D map of your local network">
+<meta property="og:description" content="See every device on your network in a live 3D graph. Runs locally; your data never leaves your machine.">
+<meta property="og:url" content="https://rhizomon.com/">
+<meta property="og:image" content="https://rhizomon.com/logo.svg">
+<meta name="twitter:card" content="summary">
+<style>
+  :root {
+    --bg: #07100f; --panel: #0d1917; --line: #1d302c; --text: #dcebe5;
+    --dim: #86a39a; --amber: #f2b84b; --green: #5fe08a; --blue: #5ab0ff;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.6 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  main { max-width: 920px; margin: 0 auto; padding: 56px 16px 72px; }
+  header { display: flex; gap: 20px; align-items: center; margin-bottom: 40px; }
+  header img { width: 88px; height: 88px; flex: none; }
+  h1 { margin: 0; font-size: 28px; letter-spacing: 0.12em; }
+  h2 { margin: 48px 0 16px; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
+  p { margin: 8px 0; }
+  .lede { color: var(--dim); max-width: 60ch; }
+  a { color: var(--green); }
+  .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .card {
+    display: block; padding: 16px; border: 1px solid var(--line); border-radius: 6px;
+    background: var(--panel); color: inherit; text-decoration: none;
+  }
+  .card:hover, .card:focus-visible { border-color: var(--green); outline: none; }
+  .card.match { border-color: var(--amber); }
+  .card strong { display: block; font-size: 17px; }
+  .card span { display: block; color: var(--dim); font-size: 13px; }
+  .card .tag { color: var(--amber); }
+  pre {
+    margin: 12px 0; padding: 14px; overflow-x: auto; border: 1px solid var(--line);
+    border-radius: 6px; background: var(--panel); font-size: 14px;
+  }
+  ul { padding-left: 20px; }
+  footer { margin-top: 56px; color: var(--dim); font-size: 13px; }
+  #donate { cursor: default; }
+  #donate code { font-size: 14px; word-break: break-all; }
+  .copy {
+    margin-top: 10px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 4px;
+    background: transparent; color: var(--green); font: inherit; font-size: 13px; cursor: pointer;
+  }
+  .copy:hover, .copy:focus-visible { border-color: var(--green); outline: none; }
+  #copy-status { margin-left: 10px; font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="logo.svg" alt="Rhizomon logo" width="88" height="88">
+    <div>
+      <h1>RHIZOMON</h1>
+      <p class="lede">A live 3D map of every device on your local network. One small program, opened in your browser. Nothing leaves your machine.</p>
+    </div>
+  </header>
+
+  <h2>Download</h2>
+  <div class="grid" id="downloads">
+    <a class="card" data-os="mac" data-arch="arm" href="https://github.com/prix0007/rhizomon/releases/latest/download/rhizomon-aarch64-apple-darwin.tar.gz">
+      <strong>macOS, Apple Silicon</strong><span>M1 and later · .tar.gz</span>
+    </a>
+    <a class="card" data-os="mac" data-arch="x64" href="https://github.com/prix0007/rhizomon/releases/latest/download/rhizomon-x86_64-apple-darwin.tar.gz">
+      <strong>macOS, Intel</strong><span>x86_64 · .tar.gz</span>
+    </a>
+    <a class="card" data-os="linux" data-arch="x64" href="https://github.com/prix0007/rhizomon/releases/latest/download/rhizomon-x86_64-unknown-linux-gnu.tar.gz">
+      <strong>Linux, x86_64</strong><span>glibc 2.35+ · .tar.gz</span>
+    </a>
+    <a class="card" data-os="linux" data-arch="arm" href="https://github.com/prix0007/rhizomon/releases/latest/download/rhizomon-aarch64-unknown-linux-gnu.tar.gz">
+      <strong>Linux, ARM64</strong><span>Raspberry Pi 4/5 (64-bit), ARM servers · .tar.gz</span>
+    </a>
+    <a class="card" data-os="win" data-arch="x64" href="https://github.com/prix0007/rhizomon/releases/latest/download/rhizomon-x86_64-pc-windows-msvc.zip">
+      <strong>Windows, x86_64</strong><span>Windows 10 and 11 · .zip</span>
+    </a>
+    <a class="card" data-os="win" data-arch="arm" href="https://github.com/prix0007/rhizomon/releases/latest/download/rhizomon-aarch64-pc-windows-msvc.zip">
+      <strong>Windows, ARM64</strong><span>Windows 11 on ARM · .zip</span>
+    </a>
+  </div>
+  <p class="lede">
+    Latest release: v0.1.1 ·
+    <a href="demo/">Try the demo in your browser</a> (synthetic network, nothing is scanned) ·
+    <a href="releases/latest/">Mirror of the latest release on this site</a>
+  </p>
+  <p class="lede">
+    Checksums: <a href="https://github.com/prix0007/rhizomon/releases/latest/download/SHA256SUMS">SHA256SUMS</a> ·
+    <a href="https://github.com/prix0007/rhizomon/releases">All releases</a> ·
+    <a href="https://github.com/prix0007/rhizomon">Source</a>
+  </p>
+
+  <p class="lede">
+    Status: macOS is tested on a real network. The Linux and Windows builds compile and pass
+    the test suite in CI but are new and have not yet been run against a real network by the
+    maintainers. <a href="https://github.com/prix0007/rhizomon/issues">Reports welcome.</a>
+  </p>
+
+  <h2>Run it</h2>
+  <p>Then open <a href="http://127.0.0.1:7878">http://127.0.0.1:7878</a> in your browser. Stop it with Ctrl-C.</p>
+  <h3>macOS</h3>
+  <pre>tar -xzf rhizomon-*-apple-darwin.tar.gz
+cd rhizomon-*-apple-darwin
+chmod +x rhizomon
+xattr -d com.apple.quarantine rhizomon   # the binary is not notarised
+./rhizomon</pre>
+  <p class="lede">Allow Local Network access for your terminal when macOS asks; without it the scan sees only the router.</p>
+  <h3>Linux</h3>
+  <pre>tar -xzf rhizomon-*-unknown-linux-gnu.tar.gz
+cd rhizomon-*-unknown-linux-gnu
+chmod +x rhizomon
+./rhizomon</pre>
+  <p class="lede">Needs glibc 2.35 or newer. If unprivileged ping is disabled on your system (<code>net.ipv4.ping_group_range</code>), the system <code>ping</code> is used instead.</p>
+  <h3>Windows (PowerShell)</h3>
+  <pre>Expand-Archive rhizomon-*-pc-windows-msvc.zip -DestinationPath .
+cd rhizomon-*-pc-windows-msvc
+.\rhizomon.exe</pre>
+  <p class="lede">The binary is not code-signed, so SmartScreen may show "Windows protected your PC": choose More info, then Run anyway. Allow it on private networks if Windows Firewall asks.</p>
+  <h3>From source</h3>
+  <p class="lede">Needs git and a Rust toolchain (1.85 or newer). Install Rust with <a href="https://rustup.rs" rel="noopener">rustup</a>; on Windows it also asks for the Visual Studio C++ build tools, and on Linux you need a C compiler (<code>build-essential</code> or equivalent) for the bundled SQLite.</p>
+  <pre>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh   # macOS / Linux; Windows: run rustup-init.exe
+git clone https://github.com/prix0007/rhizomon.git
+cd rhizomon
+cargo run --release</pre>
+  <p class="lede">The first build takes a few minutes. The UI is embedded in the binary, so no Node or npm is needed.</p>
+
+  <h2>What it does</h2>
+  <ul>
+    <li>Finds devices on your subnet and shows vendor, name and type where they can be learned.</li>
+    <li>Updates live as devices join and leave, and remembers when each was first and last seen.</li>
+    <li>Listens on 127.0.0.1 only. No cloud service, no account, no telemetry.</li>
+  </ul>
+  <p class="lede">Only scan networks you own or are allowed to scan.</p>
+
+  <h2 id="security">Security</h2>
+  <p class="lede">
+    Rhizomon listens on 127.0.0.1 only, makes no outbound internet requests, and renders every string from the network as
+    plain text. The code is reviewed against that model, and the findings are published in full rather than summarised:
+  </p>
+  <ul>
+    <li><a href="https://github.com/prix0007/rhizomon/blob/main/docs/SECURITY-REVIEW-2026-10.md">Security review, October 2026</a>: scope, threat model, every finding with its severity and status, and the controls verified.</li>
+    <li><a href="https://github.com/prix0007/rhizomon#security-model">Security model</a> and <a href="https://github.com/prix0007/rhizomon#known-limitations">known limitations</a> in the README.</li>
+    <li>Found something? Open an issue, or use GitHub's private vulnerability reporting on the repository if it is sensitive.</li>
+  </ul>
+
+  <h2 id="support">Buy me a coffee</h2>
+  <p class="lede">Rhizomon is free, open-source software built by one maintainer. If it helps you, a voluntary donation in <strong>ETH on Ethereum mainnet</strong> goes toward hosting and development.</p>
+  <div class="card" id="donate">
+    <span>Donation address (Ethereum mainnet)</span>
+    <strong><code id="eth-address">0xfb4172e26AC8735C06656f1df14151cFe8441481</code></strong>
+    <button type="button" id="copy-address" class="copy">Copy address</button>
+    <span id="copy-status" role="status" aria-live="polite"></span>
+  </div>
+  <ul>
+    <li><strong>Send only ETH on Ethereum mainnet.</strong> Tokens or other networks sent here may be lost.</li>
+    <li>The same address is in the <a href="https://github.com/prix0007/rhizomon#support-the-project">GitHub README</a>; check it matches character for character before sending.</li>
+    <li>Donations are non-refundable and come with no perks, goods or services. There is no company behind the project, so no tax receipts.</li>
+    <li>Not using a wallet? Starring the <a href="https://github.com/prix0007/rhizomon">repository</a> or reporting a bug helps too.</li>
+  </ul>
+
+  <footer><a href="#support">☕ Buy me a coffee</a> · <a href="#security">Security</a> · Rhizomon is open source. <a href="https://github.com/prix0007/rhizomon">github.com/prix0007/rhizomon</a></footer>
+</main>
+<script>
+  (function () {
+    var ua = navigator.userAgent, p = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+    var os = /Win/i.test(p) ? "win" : /Mac/i.test(p) ? "mac" : /Linux|X11/i.test(p + ua) ? "linux" : null;
+    if (!os) return;
+    var cards = document.querySelectorAll('.card[data-os="' + os + '"]');
+    for (var i = 0; i < cards.length; i++) cards[i].classList.add("match");
+  })();
+  (function () {
+    var btn = document.getElementById("copy-address"), status = document.getElementById("copy-status");
+    if (!btn || !navigator.clipboard) return;
+    btn.addEventListener("click", function () {
+      navigator.clipboard.writeText(document.getElementById("eth-address").textContent).then(function () {
+        status.textContent = "Copied";
+        setTimeout(function () { status.textContent = ""; }, 2000);
+      }, function () { status.textContent = "Copy failed; select the address instead"; });
+    });
+  })();
+</script>
+</body>
+</html>
