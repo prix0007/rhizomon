@@ -1,0 +1,13 @@
+# Weekly update PRs for the Rust lockfile and for the commit-pinned GitHub
+# Actions. Security advisories are also surfaced through Dependabot alerts.
+version: 2
+updates:
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
