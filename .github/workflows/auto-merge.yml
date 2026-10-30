@@ -6,6 +6,9 @@ name: Auto-merge maintainer PRs
 # contributors needs the owner's approval before it runs (repository Actions
 # setting).
 #
+# Pull requests from Tuglet (`tuglet/*` branches) are never merged here, even
+# when opened with the owner's token: an agent's change waits for review.
+#
 # A merge made with the workflow token does not trigger other workflows, so
 # this job starts the post-merge ones (CI on main, site deploy) explicitly.
 on:
@@ -32,8 +35,8 @@ jobs:
           set -eu
           merged=0
           for pr in $(gh pr list --repo "$REPO" --state open --author "$OWNER" \
-              --json number,isDraft,headRefOid,isCrossRepository \
-              --jq ".[] | select(.headRefOid == \"$SHA\" and (.isDraft | not) and (.isCrossRepository | not)) | .number"); do
+              --json number,isDraft,headRefOid,headRefName,isCrossRepository \
+              --jq ".[] | select(.headRefOid == \"$SHA\" and (.isDraft | not) and (.isCrossRepository | not) and (.headRefName | startswith(\"tuglet/\") | not)) | .number"); do
             echo "merging #$pr"
             gh pr merge "$pr" --repo "$REPO" --squash --delete-branch
             merged=1
