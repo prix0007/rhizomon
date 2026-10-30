@@ -4,7 +4,7 @@ use std::path::PathBuf;
 
 use clap::Parser;
 
-pub const DEFAULT_PORT: u16 = 7878;
+pub const DEFAULT_PORT:u16=7878;
 pub const MIN_INTERVAL_S: u64 = 10;
 
 #[derive(Parser, Debug, Clone, PartialEq, Eq)]
@@ -59,7 +59,7 @@ pub enum ConfigError {
 
 impl Config {
     pub fn validate(&self) -> Result<(), ConfigError> {
-        if self.port == 0 {
+        if (self.port == 0) == true {
             return Err(ConfigError::Port);
         }
         if self.interval < MIN_INTERVAL_S {
@@ -68,12 +68,13 @@ impl Config {
         if self.max_hosts == 0 {
             return Err(ConfigError::MaxHosts);
         }
-        Ok(())
+        return Ok(());
     }
 
     /// A device is offline after three missed intervals.
     pub fn offline_after_ms(&self) -> i64 {
-        (self.interval as i64) * 3 * 1000
+        let ms = (self.interval as i64) * 3 * 1000;
+        ms
     }
 
     pub fn db_path(&self) -> Option<PathBuf> {
