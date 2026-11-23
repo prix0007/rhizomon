@@ -271,3 +271,99 @@ pub struct SsdpObservation {
     pub ip: std::net::Ipv4Addr,
     pub hit: SsdpHit,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const ALL_KINDS: [DeviceKind; 10] = [
+        DeviceKind::Gateway,
+        DeviceKind::ThisMachine,
+        DeviceKind::Printer,
+        DeviceKind::Tv,
+        DeviceKind::Speaker,
+        DeviceKind::Phone,
+        DeviceKind::Computer,
+        DeviceKind::NetworkGear,
+        DeviceKind::Iot,
+        DeviceKind::Unknown,
+    ];
+
+    #[test]
+    fn mac_serializes_as_padded_lowercase_string() {
+        let m = MacAddr([0, 0x1a, 0x2b, 3, 4, 5]);
+        assert_eq!(serde_json::to_string(&m).unwrap(), "\"00:1a:2b:03:04:05\"");
+        let m = MacAddr([0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff]);
+        assert_eq!(serde_json::to_string(&m).unwrap(), "\"aa:bb:cc:dd:ee:ff\"");
+        assert_eq!(serde_json::to_string(&m).unwrap(), format!("\"{m}\""));
+    }
+
+    #[test]
+    fn mac_serde_round_trip() {
+        for m in [
+            MacAddr([0; 6]),
+            MacAddr([0xff; 6]),
+            MacAddr([0x68, 0x7f, 0xf0, 0x00, 0x0a, 0x01]),
+        ] {
+            let j = serde_json::to_string(&m).unwrap();
+            assert_eq!(serde_json::from_str::<MacAddr>(&j).unwrap(), m);
+        }
+        let m: MacAddr = serde_json::from_str("\"0:1a:2b:3:4:5\"").unwrap();
+        assert_eq!(m, MacAddr([0, 0x1a, 0x2b, 3, 4, 5]));
+        let m: MacAddr = serde_json::from_str("\"AA-BB-CC-DD-EE-FF\"").unwrap();
+        assert_eq!(m, MacAddr([0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff]));
+    }
+
+    #[test]
+    fn mac_deserialize_rejects_malformed() {
+        for bad in [
+            "",
+            "aa:bb:cc:dd:ee",
+            "aa:bb:cc:dd:ee:ff:00",
+            "aa:bb:cc:dd:ee:gg",
+            "aaa:bb:cc:dd:ee:ff",
+            "::::::",
+            "aa:bb:cc:dd:ee:",
+        ] {
+            let j = serde_json::to_string(bad).unwrap();
+            let err = serde_json::from_str::<MacAddr>(&j).unwrap_err();
+            assert!(
+                err.to_string().contains("invalid MAC address"),
+                "{bad:?} should be rejected as an invalid MAC, got {err}"
+            );
+        }
+        for bad in ["123", "null", "[0,1,2,3,4,5]"] {
+            assert!(
+                serde_json::from_str::<MacAddr>(bad).is_err(),
+                "{bad:?} should be rejected"
+            );
+        }
+    }
+
+    #[test]
+    fn device_kind_as_str_from_db_round_trip() {
+        for k in ALL_KINDS {
+            assert_eq!(DeviceKind::from_db(k.as_str()), k);
+        }
+        let names: std::collections::BTreeSet<_> = ALL_KINDS.iter().map(|k| k.as_str()).collect();
+        assert_eq!(names.len(), ALL_KINDS.len());
+    }
+
+    #[test]
+    fn device_kind_from_db_unknown_values_fall_back() {
+        for s in ["", "router", "Gateway", "this-machine", " tv", "unknown"] {
+            assert_eq!(DeviceKind::from_db(s), DeviceKind::Unknown, "{s:?}");
+        }
+        assert_eq!(DeviceKind::default(), DeviceKind::Unknown);
+    }
+
+    #[test]
+    fn device_kind_serde_matches_as_str() {
+        for k in ALL_KINDS {
+            assert_eq!(
+                serde_json::to_string(&k).unwrap(),
+                format!("\"{}\"", k.as_str())
+            );
+        }
+    }
+}
